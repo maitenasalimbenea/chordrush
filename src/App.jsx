@@ -1,7 +1,11 @@
 import { useState } from "react";
 
 export default function App() {
-  const [chord, setChord] = useState("C");
+  const chordsList = ["C", "G", "D", "Am", "Em", "F"];
+
+  const [activeChords, setActiveChords] = useState(["C"]);
+  const [currentChord, setCurrentChord] = useState("C");
+
   const [strum, setStrum] = useState("");
 
   const [opts, setOpts] = useState({
@@ -10,18 +14,33 @@ export default function App() {
     r: true,
   });
 
-  function toggle(key) {
+  function toggleChord(chord) {
+    setActiveChords(prev =>
+      prev.includes(chord)
+        ? prev.filter(c => c !== chord)
+        : [...prev, chord]
+    );
+  }
+
+  function toggleStrum(key) {
     setOpts(prev => ({ ...prev, [key]: !prev[key] }));
   }
 
-  function generateStrum() {
+  function generate() {
+    // elegir acorde aleatorio de los seleccionados
+    const randomChord =
+      activeChords[Math.floor(Math.random() * activeChords.length)];
+
+    setCurrentChord(randomChord);
+
+    // rasgueo
     const pool = [];
     if (opts.down) pool.push("↓");
     if (opts.up) pool.push("↑");
     if (opts.r) pool.push("R");
 
     if (pool.length === 0) {
-      setStrum("Seleccioná al menos una opción");
+      setStrum("Seleccioná rasgueo");
       return;
     }
 
@@ -44,72 +63,60 @@ export default function App() {
 
       <h1>🎸 ChordRush</h1>
 
-      {/* ACORDE (VERSIÓN SIMPLE, NO MULTI-SELECCIÓN) */}
-      <h2>Acorde</h2>
+      {/* ACORDES MULTI-SELECCIÓN */}
+      <h2>Acordes (seleccioná varios)</h2>
 
-      <select
-        value={chord}
-        onChange={(e) => setChord(e.target.value)}
-        style={{ padding: 8, borderRadius: 8 }}
-      >
-        <option value="C">C</option>
-        <option value="G">G</option>
-        <option value="D">D</option>
-        <option value="Am">Am</option>
-      </select>
+      <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+        {chordsList.map(chord => (
+          <button
+            key={chord}
+            onClick={() => toggleChord(chord)}
+            style={{
+              padding: 10,
+              borderRadius: 10,
+              background: activeChords.includes(chord) ? "green" : "gray",
+              color: "white",
+              cursor: "pointer"
+            }}
+          >
+            {chord}
+          </button>
+        ))}
+      </div>
 
-      <h1 style={{ fontSize: 70, marginTop: 10 }}>
-        {chord}
+      <h1 style={{ fontSize: 70, marginTop: 20 }}>
+        {currentChord}
       </h1>
 
       {/* RASGUEO */}
       <h2>Rasgueo</h2>
 
       <label>
-        <input
-          type="checkbox"
-          checked={opts.down}
-          onChange={() => toggle("down")}
-        />
-        {" "}↓ Abajo
+        <input type="checkbox" checked={opts.down} onChange={() => toggleStrum("down")} />
+        ↓ Abajo
       </label>
 
       <br />
 
       <label>
-        <input
-          type="checkbox"
-          checked={opts.up}
-          onChange={() => toggle("up")}
-        />
-        {" "}↑ Arriba
+        <input type="checkbox" checked={opts.up} onChange={() => toggleStrum("up")} />
+        ↑ Arriba
       </label>
 
       <br />
 
       <label>
-        <input
-          type="checkbox"
-          checked={opts.r}
-          onChange={() => toggle("r")}
-        />
-        {" "}R Fuerte
+        <input type="checkbox" checked={opts.r} onChange={() => toggleStrum("r")} />
+        R Fuerte
       </label>
 
       <br /><br />
 
-      <button
-        onClick={generateStrum}
-        style={{
-          padding: "10px 15px",
-          borderRadius: 10,
-          cursor: "pointer",
-        }}
-      >
-        Generar rasgueo
+      <button onClick={generate}>
+        Generar
       </button>
 
-      <h2 style={{ marginTop: 20, fontSize: 30 }}>
+      <h2 style={{ marginTop: 20 }}>
         {strum}
       </h2>
 
