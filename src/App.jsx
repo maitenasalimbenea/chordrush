@@ -11,7 +11,7 @@ export default function App() {
   });
 
   function toggle(key) {
-    setOpts({ ...opts, [key]: !opts[key] });
+    setOpts(prev => ({ ...prev, [key]: !prev[key] }));
   }
 
   function generateStrum() {
@@ -21,7 +21,7 @@ export default function App() {
     if (opts.r) pool.push("R");
 
     if (pool.length === 0) {
-      setStrum("Seleccioná opciones");
+      setStrum("Seleccioná al menos una opción");
       return;
     }
 
@@ -34,7 +34,14 @@ export default function App() {
   }
 
   return (
-    <div style={{ padding: 20, fontFamily: "Arial", background: "#0a0a0a", color: "white", minHeight: "100vh" }}>
+    <div style={{
+      minHeight: "100vh",
+      background: "#0a0a0a",
+      color: "white",
+      fontFamily: "Arial",
+      padding: 30,
+      textAlign: "center"
+    }}>
 
       <h1>🎸 ChordRush</h1>
 
@@ -54,21 +61,33 @@ export default function App() {
       <h2>Rasgueo</h2>
 
       <label>
-        <input type="checkbox" checked={opts.down} onChange={() => toggle("down")} />
+        <input
+          type="checkbox"
+          checked={opts.down}
+          onChange={() => toggle("down")}
+        />
         ↓ Abajo
       </label>
 
       <br />
 
       <label>
-        <input type="checkbox" checked={opts.up} onChange={() => toggle("up")} />
+        <input
+          type="checkbox"
+          checked={opts.up}
+          onChange={() => toggle("up")}
+        />
         ↑ Arriba
       </label>
 
       <br />
 
       <label>
-        <input type="checkbox" checked={opts.r} onChange={() => toggle("r")} />
+        <input
+          type="checkbox"
+          checked={opts.r}
+          onChange={() => toggle("r")}
+        />
         R Fuerte
       </label>
 
@@ -78,7 +97,9 @@ export default function App() {
         Generar rasgueo
       </button>
 
-      <h2 style={{ marginTop: 20 }}>{strum}</h2>
+      <h2 style={{ marginTop: 20, fontSize: 30 }}>
+        {strum}
+      </h2>
 
     </div>
   );
