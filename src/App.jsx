@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 export default function App() {
   const [chord, setChord] = useState("C");
   const [strum, setStrum] = useState("");
@@ -19,106 +21,65 @@ export default function App() {
     if (opts.r) pool.push("R");
 
     if (pool.length === 0) {
-      setStrum("Seleccioná al menos una opción");
+      setStrum("Seleccioná opciones");
       return;
     }
 
     const result = [];
-    const length = 6;
-
-    for (let i = 0; i < length; i++) {
-      const pick = pool[Math.floor(Math.random() * pool.length)];
-      result.push(pick);
+    for (let i = 0; i < 6; i++) {
+      result.push(pool[Math.floor(Math.random() * pool.length)]);
     }
 
     setStrum(result.join(" "));
   }
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#0a0a0a",
-        color: "white",
-        fontFamily: "Arial",
-        padding: 30,
-        textAlign: "center",
-      }}
-    >
+    <div style={{ padding: 20, fontFamily: "Arial", background: "#0a0a0a", color: "white", minHeight: "100vh" }}>
+
       <h1>🎸 ChordRush</h1>
 
       {/* ACORDE */}
-      <div style={{ marginTop: 20 }}>
-        <h2>Acorde</h2>
+      <h2>Acorde</h2>
 
-        <select
-          value={chord}
-          onChange={(e) => setChord(e.target.value)}
-          style={{ padding: 8, borderRadius: 8 }}
-        >
-          <option value="C">C</option>
-          <option value="G">G</option>
-          <option value="D">D</option>
-          <option value="Am">Am</option>
-        </select>
+      <select value={chord} onChange={(e) => setChord(e.target.value)}>
+        <option value="C">C</option>
+        <option value="G">G</option>
+        <option value="D">D</option>
+        <option value="Am">Am</option>
+      </select>
 
-        <h1 style={{ fontSize: 70, marginTop: 15 }}>
-          {chord}
-        </h1>
-      </div>
+      <h1 style={{ fontSize: 70 }}>{chord}</h1>
 
       {/* RASGUEO */}
-      <div style={{ marginTop: 30 }}>
-        <h2>Rasgueo</h2>
+      <h2>Rasgueo</h2>
 
-        <label>
-          <input
-            type="checkbox"
-            checked={opts.down}
-            onChange={() => toggle("down")}
-          />
-          {" "}↓ Abajo
-        </label>
+      <label>
+        <input type="checkbox" checked={opts.down} onChange={() => toggle("down")} />
+        ↓ Abajo
+      </label>
 
-        <br />
+      <br />
 
-        <label>
-          <input
-            type="checkbox"
-            checked={opts.up}
-            onChange={() => toggle("up")}
-          />
-          {" "}↑ Arriba
-        </label>
+      <label>
+        <input type="checkbox" checked={opts.up} onChange={() => toggle("up")} />
+        ↑ Arriba
+      </label>
 
-        <br />
+      <br />
 
-        <label>
-          <input
-            type="checkbox"
-            checked={opts.r}
-            onChange={() => toggle("r")}
-          />
-          {" "}R Fuerte
-        </label>
+      <label>
+        <input type="checkbox" checked={opts.r} onChange={() => toggle("r")} />
+        R Fuerte
+      </label>
 
-        <br /><br />
+      <br /><br />
 
-        <button
-          onClick={generateStrum}
-          style={{
-            padding: "10px 15px",
-            borderRadius: 10,
-            cursor: "pointer",
-          }}
-        >
-          Generar rasgueo
-        </button>
+      <button onClick={generateStrum}>
+        Generar rasgueo
+      </button>
 
-        <h2 style={{ marginTop: 20, fontSize: 30 }}>
-          {strum}
-        </h2>
-      </div>
+      <h2 style={{ marginTop: 20 }}>{strum}</h2>
+
     </div>
   );
 }
