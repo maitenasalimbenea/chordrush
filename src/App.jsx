@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export default function App() {
   const [chord, setChord] = useState("C");
   const [strum, setStrum] = useState("");
@@ -26,23 +24,28 @@ export default function App() {
     }
 
     const result = [];
-    for (let i = 0; i < 6; i++) {
-      result.push(pool[Math.floor(Math.random() * pool.length)]);
+    const length = 6;
+
+    for (let i = 0; i < length; i++) {
+      const pick = pool[Math.floor(Math.random() * pool.length)];
+      result.push(pick);
     }
 
     setStrum(result.join(" "));
   }
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      background: "#0a0a0a",
-      color: "white",
-      fontFamily: "Arial",
-      padding: 30
-    }}>
-
-      <h1 style={{ fontSize: 40 }}>🎸 ChordRush</h1>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#0a0a0a",
+        color: "white",
+        fontFamily: "Arial",
+        padding: 30,
+        textAlign: "center",
+      }}
+    >
+      <h1>🎸 ChordRush</h1>
 
       {/* ACORDE */}
       <div style={{ marginTop: 20 }}>
@@ -59,7 +62,7 @@ export default function App() {
           <option value="Am">Am</option>
         </select>
 
-        <h1 style={{ fontSize: 80, marginTop: 10 }}>
+        <h1 style={{ fontSize: 70, marginTop: 15 }}>
           {chord}
         </h1>
       </div>
@@ -68,11 +71,36 @@ export default function App() {
       <div style={{ marginTop: 30 }}>
         <h2>Rasgueo</h2>
 
-        <label><input type="checkbox" checked={opts.down} onChange={() => toggle("down")} /> ↓ Abajo</label>
+        <label>
+          <input
+            type="checkbox"
+            checked={opts.down}
+            onChange={() => toggle("down")}
+          />
+          {" "}↓ Abajo
+        </label>
+
         <br />
-        <label><input type="checkbox" checked={opts.up} onChange={() => toggle("up")} /> ↑ Arriba</label>
+
+        <label>
+          <input
+            type="checkbox"
+            checked={opts.up}
+            onChange={() => toggle("up")}
+          />
+          {" "}↑ Arriba
+        </label>
+
         <br />
-        <label><input type="checkbox" checked={opts.r} onChange={() => toggle("r")} /> R Fuerte</label>
+
+        <label>
+          <input
+            type="checkbox"
+            checked={opts.r}
+            onChange={() => toggle("r")}
+          />
+          {" "}R Fuerte
+        </label>
 
         <br /><br />
 
@@ -81,7 +109,7 @@ export default function App() {
           style={{
             padding: "10px 15px",
             borderRadius: 10,
-            cursor: "pointer"
+            cursor: "pointer",
           }}
         >
           Generar rasgueo
@@ -91,7 +119,6 @@ export default function App() {
           {strum}
         </h2>
       </div>
-
     </div>
   );
 }
