@@ -25,10 +25,9 @@ export default function App() {
       return;
     }
 
-    const result = [];
-    for (let i = 0; i < 6; i++) {
-      result.push(pool[Math.floor(Math.random() * pool.length)]);
-    }
+    const result = Array.from({ length: 6 }, () =>
+      pool[Math.floor(Math.random() * pool.length)]
+    );
 
     setStrum(result.join(" "));
   }
@@ -45,17 +44,23 @@ export default function App() {
 
       <h1>🎸 ChordRush</h1>
 
-      {/* ACORDE */}
+      {/* ACORDE (VERSIÓN SIMPLE, NO MULTI-SELECCIÓN) */}
       <h2>Acorde</h2>
 
-      <select value={chord} onChange={(e) => setChord(e.target.value)}>
+      <select
+        value={chord}
+        onChange={(e) => setChord(e.target.value)}
+        style={{ padding: 8, borderRadius: 8 }}
+      >
         <option value="C">C</option>
         <option value="G">G</option>
         <option value="D">D</option>
         <option value="Am">Am</option>
       </select>
 
-      <h1 style={{ fontSize: 70 }}>{chord}</h1>
+      <h1 style={{ fontSize: 70, marginTop: 10 }}>
+        {chord}
+      </h1>
 
       {/* RASGUEO */}
       <h2>Rasgueo</h2>
@@ -66,7 +71,7 @@ export default function App() {
           checked={opts.down}
           onChange={() => toggle("down")}
         />
-        ↓ Abajo
+        {" "}↓ Abajo
       </label>
 
       <br />
@@ -77,7 +82,7 @@ export default function App() {
           checked={opts.up}
           onChange={() => toggle("up")}
         />
-        ↑ Arriba
+        {" "}↑ Arriba
       </label>
 
       <br />
@@ -88,12 +93,19 @@ export default function App() {
           checked={opts.r}
           onChange={() => toggle("r")}
         />
-        R Fuerte
+        {" "}R Fuerte
       </label>
 
       <br /><br />
 
-      <button onClick={generateStrum}>
+      <button
+        onClick={generateStrum}
+        style={{
+          padding: "10px 15px",
+          borderRadius: 10,
+          cursor: "pointer",
+        }}
+      >
         Generar rasgueo
       </button>
 
