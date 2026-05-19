@@ -1,21 +1,21 @@
 import { useState } from "react";
 
 export default function App() {
-  const chordsList = ["C", "G", "D", "Am", "Em", "F"];
+  const chords = ["C", "G", "D", "Am", "Em", "F"];
 
-  const [activeChords, setActiveChords] = useState(["C"]);
+  const [selectedChords, setSelectedChords] = useState(["C"]);
   const [currentChord, setCurrentChord] = useState("C");
 
-  const [strum, setStrum] = useState("");
-
-  const [opts, setOpts] = useState({
+  const [strumOptions, setStrumOptions] = useState({
     down: true,
     up: true,
     r: true,
   });
 
+  const [strum, setStrum] = useState("");
+
   function toggleChord(chord) {
-    setActiveChords(prev =>
+    setSelectedChords(prev =>
       prev.includes(chord)
         ? prev.filter(c => c !== chord)
         : [...prev, chord]
@@ -23,21 +23,24 @@ export default function App() {
   }
 
   function toggleStrum(key) {
-    setOpts(prev => ({ ...prev, [key]: !prev[key] }));
+    setStrumOptions(prev => ({ ...prev, [key]: !prev[key] }));
   }
 
   function generate() {
-    // elegir acorde aleatorio de los seleccionados
+    if (selectedChords.length === 0) {
+      setCurrentChord("Seleccioná acordes");
+      return;
+    }
+
     const randomChord =
-      activeChords[Math.floor(Math.random() * activeChords.length)];
+      selectedChords[Math.floor(Math.random() * selectedChords.length)];
 
     setCurrentChord(randomChord);
 
-    // rasgueo
     const pool = [];
-    if (opts.down) pool.push("↓");
-    if (opts.up) pool.push("↑");
-    if (opts.r) pool.push("R");
+    if (strumOptions.down) pool.push("↓");
+    if (strumOptions.up) pool.push("↑");
+    if (strumOptions.r) pool.push("R");
 
     if (pool.length === 0) {
       setStrum("Seleccioná rasgueo");
@@ -63,20 +66,19 @@ export default function App() {
 
       <h1>🎸 ChordRush</h1>
 
-      {/* ACORDES MULTI-SELECCIÓN */}
-      <h2>Acordes (seleccioná varios)</h2>
+      {/* ACORDES */}
+      <h2>Seleccioná acordes</h2>
 
       <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-        {chordsList.map(chord => (
+        {chords.map(chord => (
           <button
             key={chord}
             onClick={() => toggleChord(chord)}
             style={{
               padding: 10,
               borderRadius: 10,
-              background: activeChords.includes(chord) ? "green" : "gray",
-              color: "white",
-              cursor: "pointer"
+              background: selectedChords.includes(chord) ? "green" : "gray",
+              color: "white"
             }}
           >
             {chord}
@@ -84,31 +86,18 @@ export default function App() {
         ))}
       </div>
 
-      <h1 style={{ fontSize: 70, marginTop: 20 }}>
+      <h1 style={{ fontSize: 60, marginTop: 20 }}>
         {currentChord}
       </h1>
 
       {/* RASGUEO */}
       <h2>Rasgueo</h2>
 
-      <label>
-        <input type="checkbox" checked={opts.down} onChange={() => toggleStrum("down")} />
-        ↓ Abajo
-      </label>
-
+      <label><input type="checkbox" checked={strumOptions.down} onChange={() => toggleStrum("down")} /> ↓ Abajo</label>
       <br />
-
-      <label>
-        <input type="checkbox" checked={opts.up} onChange={() => toggleStrum("up")} />
-        ↑ Arriba
-      </label>
-
+      <label><input type="checkbox" checked={strumOptions.up} onChange={() => toggleStrum("up")} /> ↑ Arriba</label>
       <br />
-
-      <label>
-        <input type="checkbox" checked={opts.r} onChange={() => toggleStrum("r")} />
-        R Fuerte
-      </label>
+      <label><input type="checkbox" checked={strumOptions.r} onChange={() => toggleStrum("r")} /> R fuerte</label>
 
       <br /><br />
 
@@ -116,9 +105,7 @@ export default function App() {
         Generar
       </button>
 
-      <h2 style={{ marginTop: 20 }}>
-        {strum}
-      </h2>
+      <h2 style={{ marginTop: 20 }}>{strum}</h2>
 
     </div>
   );
