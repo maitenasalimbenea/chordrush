@@ -2,7 +2,6 @@ import { useState } from "react";
 
 export default function App() {
   const [chord, setChord] = useState("C");
-  const [showImg, setShowImg] = useState(true);
   const [strum, setStrum] = useState("");
 
   const [opts, setOpts] = useState({
@@ -22,14 +21,12 @@ export default function App() {
     if (opts.r) pool.push("R");
 
     if (pool.length === 0) {
-      setStrum("Seleccioná al menos una opción");
+      setStrum("Seleccioná opciones");
       return;
     }
 
-    const length = 6;
     const result = [];
-
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < 6; i++) {
       const pick = pool[Math.floor(Math.random() * pool.length)];
       result.push(pick);
     }
@@ -38,7 +35,7 @@ export default function App() {
   }
 
   return (
-    <div style={{ padding: 20, fontFamily: "Arial", color: "white", background: "#0a0a0a", minHeight: "100vh" }}>
+    <div style={{ padding: 20, fontFamily: "Arial", background: "#0a0a0a", color: "white", minHeight: "100vh" }}>
 
       <h1>🎸 ChordRush</h1>
 
@@ -52,32 +49,12 @@ export default function App() {
         <option value="Am">Am</option>
       </select>
 
-      <br /><br />
-
-      <label>
-        <input
-          type="checkbox"
-          checked={showImg}
-          onChange={() => setShowImg(!showImg)}
-        />
-        Mostrar imagen del acorde
-      </label>
-
-      <div style={{ marginTop: 15 }}>
-        {showImg ? (
-          <img
-            src={`/chords/${chord}.jpg`}
-            alt={chord}
-            width="180"
-            style={{ borderRadius: 12 }}
-          />
-        ) : (
-          <h1>{chord}</h1>
-        )}
-      </div>
+      <h1 style={{ fontSize: 60, marginTop: 10 }}>
+        {chord}
+      </h1>
 
       {/* RASGUEO */}
-      <h2 style={{ marginTop: 30 }}>Rasgueo</h2>
+      <h2>Rasgueo</h2>
 
       <label>
         <input
@@ -112,14 +89,7 @@ export default function App() {
 
       <br /><br />
 
-      <button
-        onClick={generateStrum}
-        style={{
-          padding: "10px 15px",
-          borderRadius: 10,
-          cursor: "pointer"
-        }}
-      >
+      <button onClick={generateStrum}>
         Generar rasgueo
       </button>
 
